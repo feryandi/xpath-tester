@@ -1,4 +1,4 @@
-from lxml import etree
+from lxml import html, etree
 import argparse
 import sys
 
@@ -20,8 +20,7 @@ def main(argv):
   if args.xpath == None:
     print('What XPath that you need to try?')
     return
-
-  print(args)
+  print('XPath: ' + args.xpath)
 
   html_data = args.html
 
@@ -36,11 +35,14 @@ def main(argv):
       print('Please insert --html or --url')
       return
   
-  tree = etree.HTML(html_data)
+  tree = html.fromstring(html_data)
   results = tree.xpath(args.xpath)
 
   for result in results:
-    print(etree.tostring(result, pretty_print=True))
+    try:
+      print(etree.tostring(result, pretty_print=True))
+    except:
+      print(result)
     print('--- --- --- --- --- ---')
     
 if __name__ == "__main__":
